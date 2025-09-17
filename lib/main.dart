@@ -47,16 +47,7 @@ class HomePage extends StatelessWidget {
                 );
               },
             ),
-            ElevatedButton(
-              child: const Text("My Trophies"),
-              onPressed: () {
-                
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const TrophyCollectionScreen()),
-                );
-              },
-            ),
+
           ],
         ),
       ),
