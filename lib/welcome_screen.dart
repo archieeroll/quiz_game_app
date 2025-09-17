@@ -70,8 +70,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                 Image.asset(
                   "assets/quizmos_text.png",
                   width: 300,
-                  height: 100, // optional
-                  fit: BoxFit.contain, // keeps the aspect ratio
+                  height: 100, 
+                  fit: BoxFit.contain, 
 
                 ),
 

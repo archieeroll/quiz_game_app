@@ -199,7 +199,7 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
                       
                       const SizedBox(height: 12),
                       
-                      // Animated progress bar
+                      // Progress bar
                       AnimatedBuilder(
                         animation: _progressAnimation,
                         builder: (context, child) {

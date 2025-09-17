@@ -187,7 +187,7 @@ class _TrophyScreenState extends State<TrophyScreen>
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Glowing trophy with highlight effect
+                 
                   Transform.scale(
                     scale: _trophyScale.value,
                     child: Container(
@@ -220,7 +220,7 @@ class _TrophyScreenState extends State<TrophyScreen>
                             ? Stack(
                                 alignment: Alignment.center,
                                 children: [
-                                  // Glow effect for trophy
+                                  // circular glow
                                   Container(
                                     width: 100,
                                     height: 100,
