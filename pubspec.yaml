@@ -66,8 +66,6 @@ flutter:
   assets:
     - assets/background_1.png
     - assets/background_2.png
-    - assets/background_3.png
-    - assets/background_4.png
     - assets/quizmos_icon.png
     - assets/quizmos_text.png
     - assets/quizmos_head.png
@@ -75,10 +73,11 @@ flutter:
     - assets/walking.gif
     - assets/trophy1.png
     - assets/trophy2.png
-    - assets/confetti.png
     - assets/confetti.gif
     - assets/happy_quizmos.gif
     - assets/sad_quizmos.gif
+    - assets/walking_quizmos.gif
+    - assets/trophy_quizmos.gif
 
 
 
