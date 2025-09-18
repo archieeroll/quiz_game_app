@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:audioplayers/audioplayers.dart'; 
 import 'result_screen.dart';
 import 'trophy_screen.dart';
 
@@ -18,21 +19,29 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
   late Animation<double> _progressAnimation;
   late Animation<double> _cardAnimation;
 
+  final AudioPlayer _audioPlayer = AudioPlayer(); 
+
   final List<Map<String, dynamic>> questions = [
     {
       "question": "What planet is known as the Red Planet?",
       "options": ["A. Mercury", "B. Venus", "C. Mars", "D. Jupiter"],
-      "answer": "C. Mars"
+      "answer": "C. Mars",
     },
     {
-      "question": "What is the name of the galaxy that contains our Solar System?",
-      "options": ["A. Andromeda Galaxy", "B. Milky Way Galaxy", "C. Whirlpool Galaxy", "D. Black Eye Galaxy"],
-      "answer": "B. Milky Way Galaxy"
+      "question":
+          "What is the name of the galaxy that contains our Solar System?",
+      "options": [
+        "A. Andromeda Galaxy",
+        "B. Milky Way Galaxy",
+        "C. Whirlpool Galaxy",
+        "D. Black Eye Galaxy",
+      ],
+      "answer": "B. Milky Way Galaxy",
     },
     {
       "question": "Which planet has the most moons?",
       "options": ["A. Earth", "B. Jupiter", "C. Saturn", "D. Neptune"],
-      "answer": "B. Jupiter"
+      "answer": "B. Jupiter",
     },
     {
       "question": "What is a supernova?",
@@ -40,14 +49,19 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
         "A. A collision of two stars",
         "B. A black hole eating a star",
         "C. The explosion of a star",
-        "D. A new star being born"
+        "D. A new star being born",
       ],
-      "answer": "C. The explosion of a star"
+      "answer": "C. The explosion of a star",
     },
     {
       "question": "Who was the first woman to travel into space?",
-      "options": ["A. Sally Ride", "B. Valentina Tereshkova", "C. Mae Jemison", "D. Kalpana Chawla"],
-      "answer": "B. Valentina Tereshkova"
+      "options": [
+        "A. Sally Ride",
+        "B. Valentina Tereshkova",
+        "C. Mae Jemison",
+        "D. Kalpana Chawla",
+      ],
+      "answer": "B. Valentina Tereshkova",
     },
   ];
 
@@ -62,23 +76,15 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 600),
       vsync: this,
     );
-    
-    _progressAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _progressController,
-      curve: Curves.easeInOut,
-    ));
-    
-    _cardAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _cardController,
-      curve: Curves.elasticOut,
-    ));
-    
+
+    _progressAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _progressController, curve: Curves.easeInOut),
+    );
+
+    _cardAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _cardController, curve: Curves.elasticOut),
+    );
+
     _startAnimations();
   }
 
@@ -91,7 +97,16 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
   void dispose() {
     _progressController.dispose();
     _cardController.dispose();
+    _audioPlayer.dispose(); 
     super.dispose();
+  }
+
+  Future<void> _playClickSound() async {
+    try {
+      await _audioPlayer.play(AssetSource('sounds/select.mp3'), volume: 0.4);
+    } catch (e) {
+      debugPrint("Failed to play sound: $e");
+    }
   }
 
   void checkAnswer(String selected) {
@@ -99,47 +114,44 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
     if (isCorrect) score++;
 
     Navigator.push(
-  context,
-  MaterialPageRoute(
-    builder: (_) => TrophyScreen(
-      isCorrect: isCorrect,
-      currentScore: score,
-      totalQuestions: questions.length,
-      onNext: () {
-        Navigator.pop(context);
-        if (currentIndex < questions.length - 1) {
-          setState(() {
-            currentIndex++;
-            selectedOption = null;
-          });
-          _cardController.reset();
-          _progressController.reset();
-          _startAnimations();
-        } else {
-          Navigator.pushReplacement(
-  context,
-  MaterialPageRoute(
-    builder: (_) => ResultScreen(
-      score: score,
-      totalQuestions: questions.length, 
-    ),
-  ),
-);
-
-        }
-      },
-    ),
-  ),
-);
-
-    
+      context,
+      MaterialPageRoute(
+        builder: (_) => TrophyScreen(
+          isCorrect: isCorrect,
+          currentScore: score,
+          totalQuestions: questions.length,
+          onNext: () {
+            Navigator.pop(context);
+            if (currentIndex < questions.length - 1) {
+              setState(() {
+                currentIndex++;
+                selectedOption = null;
+              });
+              _cardController.reset();
+              _progressController.reset();
+              _startAnimations();
+            } else {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => ResultScreen(
+                    score: score,
+                    totalQuestions: questions.length,
+                  ),
+                ),
+              );
+            }
+          },
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final q = questions[currentIndex];
     final progress = (currentIndex + 1) / questions.length;
-    
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -160,7 +172,10 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
                     children: [
                       // Level indicator
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 8,
+                        ),
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: [Colors.amber, Colors.orange],
@@ -184,9 +199,9 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
                           ),
                         ),
                       ),
-                      
+
                       const SizedBox(height: 16),
-                      
+
                       // Question counter
                       Text(
                         "Question ${currentIndex + 1} of ${questions.length}",
@@ -196,9 +211,9 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      
+
                       const SizedBox(height: 12),
-                      
+
                       // Progress bar
                       AnimatedBuilder(
                         animation: _progressAnimation,
@@ -231,18 +246,18 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
                 const SizedBox(height: 20),
 
                 // Question text
-                              Text(
-                                q["question"],
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  height: 1.3,
-                                ),
-                              ),
-                              
-                              const SizedBox(height: 32),
+                Text(
+                  q["question"],
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    height: 1.3,
+                  ),
+                ),
+
+                const SizedBox(height: 32),
 
                 // Question card with animation
                 Expanded(
@@ -268,9 +283,6 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
                           child: Column(
                             children: [
                               // Question icon
-                              
-                              
-                              
 
                               // Options
                               Expanded(
@@ -279,31 +291,44 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
                                   itemBuilder: (context, index) {
                                     final option = q["options"][index];
                                     final isSelected = option == selectedOption;
-                                    
+
                                     return AnimatedContainer(
-                                      duration: const Duration(milliseconds: 200),
+                                      duration: const Duration(
+                                        milliseconds: 200,
+                                      ),
                                       margin: const EdgeInsets.only(bottom: 12),
                                       child: Material(
                                         elevation: isSelected ? 8 : 2,
                                         borderRadius: BorderRadius.circular(16),
                                         child: InkWell(
-                                          borderRadius: BorderRadius.circular(16),
-                                          onTap: () {
+                                          borderRadius: BorderRadius.circular(
+                                            16,
+                                          ),
+                                          onTap: () async {
+                                            await _playClickSound(); 
                                             setState(() {
                                               selectedOption = option;
                                             });
                                           },
                                           child: AnimatedContainer(
-                                            duration: const Duration(milliseconds: 200),
+                                            duration: const Duration(
+                                              milliseconds: 200,
+                                            ),
                                             padding: const EdgeInsets.all(16),
                                             decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(16),
+                                              borderRadius:
+                                                  BorderRadius.circular(16),
                                               gradient: isSelected
                                                   ? LinearGradient(
-                                                      colors: [Colors.purple.shade400, Colors.purple.shade600],
+                                                      colors: [
+                                                        Colors.purple.shade400,
+                                                        Colors.purple.shade600,
+                                                      ],
                                                     )
                                                   : null,
-                                              color: isSelected ? null : Colors.grey.shade50,
+                                              color: isSelected
+                                                  ? null
+                                                  : Colors.grey.shade50,
                                               border: Border.all(
                                                 color: Colors.black,
                                                 width: 2,
@@ -312,14 +337,22 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
                                             child: Row(
                                               children: [
                                                 AnimatedContainer(
-                                                  duration: const Duration(milliseconds: 200),
+                                                  duration: const Duration(
+                                                    milliseconds: 200,
+                                                  ),
                                                   width: 24,
                                                   height: 24,
                                                   decoration: BoxDecoration(
                                                     shape: BoxShape.circle,
-                                                    color: isSelected ? Colors.white : Colors.transparent,
+                                                    color: isSelected
+                                                        ? Colors.white
+                                                        : Colors.transparent,
                                                     border: Border.all(
-                                                      color: isSelected ? Colors.white : Colors.grey.shade400,
+                                                      color: isSelected
+                                                          ? Colors.white
+                                                          : Colors
+                                                                .grey
+                                                                .shade400,
                                                       width: 2,
                                                     ),
                                                   ),
@@ -337,8 +370,13 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
                                                     option,
                                                     style: TextStyle(
                                                       fontSize: 16,
-                                                      fontWeight: FontWeight.w500,
-                                                      color: isSelected ? Colors.white : const Color(0xFF2D3748),
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: isSelected
+                                                          ? Colors.white
+                                                          : const Color(
+                                                              0xFF2D3748,
+                                                            ),
                                                     ),
                                                   ),
                                                 ),
@@ -361,19 +399,25 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
                                 height: 56,
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: selectedOption != null ? Colors.purple : Colors.grey.shade300,
-                                    foregroundColor: selectedOption != null ? Colors.white : Colors.grey.shade500,
+                                    backgroundColor: selectedOption != null
+                                        ? Colors.purple
+                                        : Colors.grey.shade300,
+                                    foregroundColor: selectedOption != null
+                                        ? Colors.white
+                                        : Colors.grey.shade500,
                                     elevation: selectedOption != null ? 8 : 0,
                                     shadowColor: Colors.amber.withOpacity(0.3),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(16),
                                     ),
                                   ),
-                                  onPressed: selectedOption != null 
-                                      ? () => checkAnswer(selectedOption!) 
+                                  onPressed: selectedOption != null
+                                      ? () => checkAnswer(selectedOption!)
                                       : null,
                                   child: Text(
-                                    selectedOption != null ? "SUBMIT ANSWER" : "SELECT AN OPTION",
+                                    selectedOption != null
+                                        ? "SUBMIT ANSWER"
+                                        : "SELECT AN OPTION",
                                     style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:confetti/confetti.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class ResultScreen extends StatefulWidget {
   final int score;
@@ -16,10 +17,12 @@ class ResultScreen extends StatefulWidget {
   State<ResultScreen> createState() => _ResultScreenState();
 }
 
-class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderStateMixin {
+class _ResultScreenState extends State<ResultScreen>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
   late ConfettiController _confettiController;
+  final AudioPlayer _audioPlayer = AudioPlayer();
 
   @override
   void initState() {
@@ -36,11 +39,25 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
       curve: Curves.elasticOut,
     );
 
-    _confettiController = ConfettiController(duration: const Duration(seconds: 2));
+    _confettiController = ConfettiController(
+      duration: const Duration(seconds: 2),
+    );
 
     if (widget.score >= 2) {
       _confettiController.play();
     }
+
+    // sound- complete.mp3
+    Future.delayed(const Duration(milliseconds: 100), () async {
+      try {
+        await _audioPlayer.play(
+          AssetSource('sounds/complete.mp3'),
+          volume: 0.7,
+        );
+      } catch (e) {
+        debugPrint("Failed to play complete sound: $e");
+      }
+    });
   }
 
   Future<void> saveTrophy() async {
@@ -54,6 +71,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
   void dispose() {
     _controller.dispose();
     _confettiController.dispose();
+    _audioPlayer.dispose();
     super.dispose();
   }
 
@@ -84,7 +102,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
                     Stack(
                       alignment: Alignment.center,
                       children: [
-                        // confetti add as animation- remove the gif initially addded 
+                        // confetti add as animation- remove the gif initially addded
                         ConfettiWidget(
                           confettiController: _confettiController,
                           blastDirectionality: BlastDirectionality.explosive,
@@ -103,7 +121,6 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
                           ],
                         ),
 
-                       
                         Container(
                           width: 250,
                           height: 250,
@@ -120,7 +137,6 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
                           ),
                         ),
 
-                        
                         ScaleTransition(
                           scale: _scaleAnimation,
                           child: Image.asset(
@@ -153,7 +169,10 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
 
                   //  Score breakdown
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 30,
+                      vertical: 15,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(30),
@@ -174,7 +193,10 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
                           children: [
                             Row(
                               children: [
-                                const Icon(Icons.check_circle, color: Colors.green),
+                                const Icon(
+                                  Icons.check_circle,
+                                  color: Colors.green,
+                                ),
                                 const SizedBox(width: 6),
                                 Text(
                                   '${widget.score}',
@@ -214,7 +236,10 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
                     icon: const Icon(Icons.home),
                     label: const Text("Back to Home"),
                     style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 30,
+                        vertical: 15,
+                      ),
                       backgroundColor: Colors.deepPurple,
                       foregroundColor: Colors.white,
                     ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:audioplayers/audioplayers.dart'; 
 
 class TrophyScreen extends StatefulWidget {
   final bool isCorrect;
@@ -25,16 +26,17 @@ class _TrophyScreenState extends State<TrophyScreen>
   late Animation<double> _trophyScale;
   late Animation<double> _trophyGlow;
   late Animation<double> _stampScale;
+  final AudioPlayer _audioPlayer = AudioPlayer(); 
 
   @override
   void initState() {
     super.initState();
-    
+
     _trophyController = AnimationController(
       duration: const Duration(milliseconds: 800),
       vsync: this,
     );
-    
+
     _stampController = AnimationController(
       duration: const Duration(milliseconds: 1200),
       vsync: this,
@@ -60,6 +62,19 @@ class _TrophyScreenState extends State<TrophyScreen>
       });
     }
 
+    // Play win or fail sound
+    Future.delayed(const Duration(milliseconds: 100), () async {
+      try {
+        if (widget.isCorrect) {
+          await _audioPlayer.play(AssetSource('sounds/win.mp3'), volume: 0.7);
+        } else {
+          await _audioPlayer.play(AssetSource('sounds/fail.mp3'), volume: 0.7);
+        }
+      } catch (e) {
+        debugPrint("Failed to play result sound: $e");
+      }
+    });
+
     // Auto-close after showing the result
     Future.delayed(const Duration(milliseconds: 2500), () {
       if (mounted) {
@@ -72,6 +87,7 @@ class _TrophyScreenState extends State<TrophyScreen>
   void dispose() {
     _trophyController.dispose();
     _stampController.dispose();
+    _audioPlayer.dispose(); 
     super.dispose();
   }
 
@@ -105,13 +121,14 @@ class _TrophyScreenState extends State<TrophyScreen>
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: List.generate(widget.totalQuestions, (index) {
               bool isEarned = index < widget.currentScore;
-              bool isNewStamp = widget.isCorrect && index == widget.currentScore - 1;
-              
+              bool isNewStamp =
+                  widget.isCorrect && index == widget.currentScore - 1;
+
               return AnimatedBuilder(
                 animation: _stampController,
                 builder: (context, child) {
                   double scale = isNewStamp ? _stampScale.value : 1.0;
-                  
+
                   return Transform.scale(
                     scale: scale,
                     child: Container(
@@ -121,16 +138,20 @@ class _TrophyScreenState extends State<TrophyScreen>
                         shape: BoxShape.circle,
                         color: isEarned ? Colors.amber : Colors.grey.shade200,
                         border: Border.all(
-                          color: isEarned ? Colors.orange : Colors.grey.shade300,
+                          color: isEarned
+                              ? Colors.orange
+                              : Colors.grey.shade300,
                           width: 2,
                         ),
-                        boxShadow: isEarned ? [
-                          BoxShadow(
-                            color: Colors.amber.withOpacity(0.4),
-                            blurRadius: 8,
-                            offset: const Offset(0, 2),
-                          ),
-                        ] : null,
+                        boxShadow: isEarned
+                            ? [
+                                BoxShadow(
+                                  color: Colors.amber.withOpacity(0.4),
+                                  blurRadius: 8,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ]
+                            : null,
                       ),
                       child: Center(
                         child: isEarned
@@ -157,10 +178,7 @@ class _TrophyScreenState extends State<TrophyScreen>
           const SizedBox(height: 8),
           Text(
             "${widget.currentScore}/${widget.totalQuestions} Stars Earned",
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.grey.shade600,
-            ),
+            style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
           ),
         ],
       ),
@@ -187,7 +205,6 @@ class _TrophyScreenState extends State<TrophyScreen>
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                 
                   Transform.scale(
                     scale: _trophyScale.value,
                     child: Container(
@@ -204,7 +221,9 @@ class _TrophyScreenState extends State<TrophyScreen>
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.white.withOpacity(0.3 * _trophyGlow.value),
+                            color: Colors.white.withOpacity(
+                              0.3 * _trophyGlow.value,
+                            ),
                             blurRadius: 30,
                             spreadRadius: 5,
                           ),
@@ -235,10 +254,16 @@ class _TrophyScreenState extends State<TrophyScreen>
                                       ],
                                     ),
                                   ),
-                                  Image.asset("assets/happy_quizmos.gif", height: 160),
+                                  Image.asset(
+                                    "assets/happy_quizmos.gif",
+                                    height: 160,
+                                  ),
                                 ],
                               )
-                            : Image.asset("assets/sad_quizmos.gif", height: 160),
+                            : Image.asset(
+                                "assets/sad_quizmos.gif",
+                                height: 160,
+                              ),
                       ),
                     ),
                   ),
@@ -247,7 +272,10 @@ class _TrophyScreenState extends State<TrophyScreen>
 
                   // Result text
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 32,
+                      vertical: 16,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(0.2),
                       borderRadius: BorderRadius.circular(50),
@@ -273,17 +301,17 @@ class _TrophyScreenState extends State<TrophyScreen>
 
                   // Auto-close indicator
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(0.2),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: const Text(
                       "Auto-continuing...",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.white70,
-                      ),
+                      style: TextStyle(fontSize: 14, color: Colors.white70),
                     ),
                   ),
                 ],
