@@ -191,8 +191,8 @@ class _TrophyScreenState extends State<TrophyScreen>
                   Transform.scale(
                     scale: _trophyScale.value,
                     child: Container(
-                      width: 140,
-                      height: 140,
+                      width: 160,
+                      height: 160,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         gradient: RadialGradient(
@@ -235,10 +235,10 @@ class _TrophyScreenState extends State<TrophyScreen>
                                       ],
                                     ),
                                   ),
-                                  Image.asset("assets/happy_quizmos.gif", height: 110),
+                                  Image.asset("assets/happy_quizmos.gif", height: 160),
                                 ],
                               )
-                            : Image.asset("assets/sad_quizmos.gif", height: 110),
+                            : Image.asset("assets/sad_quizmos.gif", height: 160),
                       ),
                     ),
                   ),

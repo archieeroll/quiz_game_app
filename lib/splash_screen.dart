@@ -36,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset("assets/quizmos_icon.png", width: 150),
+              Image.asset("assets/walking_quizmos.gif", width: 150),
               const SizedBox(height: 20),
               Image.asset("assets/quizmos_text.png", width: 200),
             ],
