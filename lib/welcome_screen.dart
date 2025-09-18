@@ -60,7 +60,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/background_1.png"),
+            image: AssetImage("assets/images/background_1.png"),
             fit: BoxFit.cover,
           ),
         ),
@@ -73,13 +73,13 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // Character icon
-                  Image.asset("assets/quizmos_head.png", width: 300),
+                  Image.asset("assets/images/quizmos_head.png", width: 300),
 
                   const SizedBox(height: 6),
 
                   // Logo text
                   Image.asset(
-                    "assets/quizmos_text.png",
+                    "assets/images/quizmos_text.png",
                     width: 300,
                     height: 100,
                     fit: BoxFit.contain,

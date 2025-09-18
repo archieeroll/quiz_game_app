@@ -156,7 +156,7 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/background_1.png"),
+            image: AssetImage("assets/images/background_1.png"),
             fit: BoxFit.cover,
           ),
         ),
@@ -282,7 +282,7 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
                           ),
                           child: Column(
                             children: [
-                              // Question icon
+                              
 
                               // Options
                               Expanded(

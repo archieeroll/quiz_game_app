@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:confetti/confetti.dart';
 import 'package:audioplayers/audioplayers.dart';
 
+
 class ResultScreen extends StatefulWidget {
   final int score;
   final int totalQuestions;
@@ -87,7 +88,7 @@ class _ResultScreenState extends State<ResultScreen>
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/background_2.png'),
+                image: AssetImage('assets/images/background_2.png'),
                 fit: BoxFit.cover,
               ),
             ),
@@ -140,7 +141,7 @@ class _ResultScreenState extends State<ResultScreen>
                         ScaleTransition(
                           scale: _scaleAnimation,
                           child: Image.asset(
-                            'assets/trophy_quizmos.gif',
+                            'assets/images/trophy_quizmos.gif',
                             height: 220,
                           ),
                         ),

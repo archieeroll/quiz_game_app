@@ -28,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/background_1.png"),
+            image: AssetImage("assets/images/background_1.png"),
             fit: BoxFit.cover,
           ),
         ),
@@ -36,9 +36,9 @@ class _SplashScreenState extends State<SplashScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset("assets/walking_quizmos.gif", width: 150),
+              Image.asset("assets/images/walking_quizmos.gif", width: 150),
               const SizedBox(height: 20),
-              Image.asset("assets/quizmos_text.png", width: 200),
+              Image.asset("assets/images/quizmos_text.png", width: 200),
             ],
           ),
         ),

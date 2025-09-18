@@ -255,13 +255,13 @@ class _TrophyScreenState extends State<TrophyScreen>
                                     ),
                                   ),
                                   Image.asset(
-                                    "assets/happy_quizmos.gif",
+                                    "assets/images/happy_quizmos.gif",
                                     height: 160,
                                   ),
                                 ],
                               )
                             : Image.asset(
-                                "assets/sad_quizmos.gif",
+                                "assets/images/sad_quizmos.gif",
                                 height: 160,
                               ),
                       ),

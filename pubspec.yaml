@@ -66,17 +66,17 @@ flutter:
 
   uses-material-design: true
   assets:
-    - assets/background_1.png
-    - assets/background_2.png
-    - assets/quizmos_icon.png
-    - assets/quizmos_text.png
-    - assets/quizmos_head.png
-    - assets/trophy2.png
-    - assets/confetti.gif
-    - assets/happy_quizmos.gif
-    - assets/sad_quizmos.gif
-    - assets/walking_quizmos.gif
-    - assets/trophy_quizmos.gif
+    - assets/images/background_1.png
+    - assets/images/background_2.png
+    - assets/images/quizmos_icon.png
+    - assets/images/quizmos_text.png
+    - assets/images/quizmos_head.png
+    - assets/images/trophy2.png
+    - assets/images/confetti.gif
+    - assets/images/happy_quizmos.gif
+    - assets/images/sad_quizmos.gif
+    - assets/images/walking_quizmos.gif
+    - assets/images/trophy_quizmos.gif
     - assets/sounds/select.mp3
     - assets/sounds/win.mp3
     - assets/sounds/fail.mp3
